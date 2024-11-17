@@ -91,5 +91,5 @@ class Credential:
             str: The string representation of the credential.
 
         """
-        return f"Website: {self._website}; Username: {self._username}; Password: {self._password}"
+        return f'Website: {self._website}; Username: {self._username}; Password: {self._password}'
 
