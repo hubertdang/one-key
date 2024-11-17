@@ -3,6 +3,7 @@ class Credentials:
     A class to represent a set of credentials.
 
     Attributes:
+        website: The website the credentials are used for.
         username: The username of the credentials.
         password: The password of the credentials.
 
@@ -13,12 +14,34 @@ class Credentials:
         Initializes a new Credentials instance.
 
         Args:
+            website: The website the credentials are used for.
             username: The username of the credentials.
             password: The password of the credentials.
 
         """
+        self._website = website
         self._username = username
         self._password = password
+
+    def get_website(self):
+        """
+        Gets the website the credentials are used for.
+
+        Returns:
+            str: The website the credentials are used for.
+
+        """
+        return self._website
+
+    def set_website(self, website: str):
+        """
+        Sets the website the credentials are used for.
+
+        Args:
+            website: The website the credentials are used for.
+
+        """
+        self._website = website
 
     def get_username(self):
         """
@@ -68,5 +91,5 @@ class Credentials:
             str: The string representation of the credentials.
 
         """
-        return f"Username: {self._username}; Password: {self._password}"
+        return f"Website: {self._website}; Username: {self._username}; Password: {self._password}"
 
