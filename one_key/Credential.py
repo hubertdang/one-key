@@ -9,7 +9,7 @@ class Credential:
 
     """
 
-    def __init__(self, username: str, password: str):
+    def __init__(self, website: str, username: str, password: str):
         """
         Initializes a new Credential instance.
 
