@@ -2,28 +2,28 @@ from one_key.Credential import Credential
 
 class User:
     def __init__(self, name: str, key: str):
-        self._name = name
-        self._key = key
-        self._credentials = {}
+        self.__name = name
+        self.__key = key
+        self.__credentials = {}
 
     def get_name(self):
-        return self._name
+        return self.__name
 
     def set_name(self, name: str):
-        self._name = name
+        self.__name = name
 
     def get_key(self):
-        return self._key
+        return self.__key
 
-    def set_key(self, key: str):
-        self._key = key
+    def set__key(self, key: str):
+        self.__key = key
 
     def add_credential(self, credential: Credential):
-        self._credentials[credential.get_website] = credential
+        self.__credentials[credential.get_website] = credential
 
     def remove_credential(self, website: str):
-        del self._credentials[website]
+        del self.__credentials[website]
 
     def get_credential(self, website: str, key: str):
-        if self._key == key:
-            return self._credentials[website]
+        if self.__key == key:
+            return self.__credentials[website]

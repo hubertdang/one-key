@@ -19,9 +19,9 @@ class Credential:
             password: The password of the credential.
 
         """
-        self._website = website
-        self._username = username
-        self._password = password
+        self.__website = website
+        self.__username = username
+        self.__password = password
 
     def get_website(self):
         """
@@ -31,7 +31,7 @@ class Credential:
             str: The website the credential is used for.
 
         """
-        return self._website
+        return self.__website
 
     def set_website(self, website: str):
         """
@@ -41,7 +41,7 @@ class Credential:
             website: The website the credential is used for.
 
         """
-        self._website = website
+        self.__website = website
 
     def get_username(self):
         """
@@ -51,7 +51,7 @@ class Credential:
             str: The username of the credential.
 
         """
-        return self._username
+        return self.__username
 
     def set_username(self, username: str):
         """
@@ -61,7 +61,7 @@ class Credential:
             username: The username to set the credential with.
 
         """
-        self._username = username
+        self.__username = username
 
     def get_password(self):
         """
@@ -71,7 +71,7 @@ class Credential:
             str: The password of the credential.
 
         """
-        return self._password
+        return self.__password
 
     def set_password(self, password: str):
         """
@@ -81,7 +81,7 @@ class Credential:
             password: The password to set the credential with.
 
         """
-        self._password = password
+        self.__password = password
 
     def __str__(self):
         """
@@ -91,5 +91,5 @@ class Credential:
             str: The string representation of the credential.
 
         """
-        return f'Website: {self._website}; Username: {self._username}; Password: {self._password}'
+        return f'Website: {self.__website}; Username: {self.__username}; Password: {self.__password}'
 
