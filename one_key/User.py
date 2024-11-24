@@ -33,6 +33,29 @@ class User:
         self.__signed_in = False
         self.__credentials = {}
 
+    def __eq__(self, other):
+        """
+        Checks if two User objects are equal.
+
+        Args:
+            other: The other User object.
+
+        Returns:
+            True if they are equal, False otherwise.
+
+        """
+        if not isinstance(other, User):
+            return False
+        if other._User__username != self.__username:
+            return False
+        if other._User__key != self.__key:
+            return False
+        if other._User__signed_in != self.__signed_in:
+            return False
+        if other._User__credentials != self.__credentials:
+            return False
+        return True
+
     def sign_in(self, key: str):
         """
         Signs the user in. 

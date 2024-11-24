@@ -1,5 +1,6 @@
 from .context import one_key
 from one_key.User import User
+from one_key.Credential import Credential
 
 import unittest
 
@@ -21,6 +22,28 @@ class TestUser(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             u = User('dina', '  ')
+
+    def test_eq(self):
+        u1 = User('dina', 'key')
+        u2 = User('dina', 'key')
+        self.assertTrue(u1 == u2)
+
+        u2 = User('bina', 'key')
+        self.assertFalse(u1 == u2)
+
+        u2 = User('dina', 'other key')
+        self.assertFalse(u1 == u2)
+
+        u2 = User('dina', 'key')
+        u1.sign_in('key')
+        self.assertFalse(u1 == u2)
+
+        u2.sign_in('key')
+        c = Credential('x.com', 'tree', 'secret')
+        u1.add_credential(c)
+        self.assertFalse(u1 == u2)
+        u2.add_credential(c)
+        self.assertTrue(u1 == u2)
 
     def test_sign_in(self):
         u = User('dina', 'key')
