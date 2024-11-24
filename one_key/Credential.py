@@ -3,9 +3,9 @@ class Credential:
     A class to represent a login credential.
 
     Attributes:
-        website: The website the credential is used for.
-        username: The username of the credential.
-        password: The password of the credential.
+        __website: The website the credential is used for.
+        __username: The username of the credential.
+        __password: The password of the credential.
 
     """
 
@@ -18,7 +18,16 @@ class Credential:
             username: The username of the credential.
             password: The password of the credential.
 
+        Raises:
+            ValueError: If the website, username, or password is invalid.
+
         """
+        if website is None or website.strip() == '':
+            raise ValueError('Invalid website.')
+        if username is None or username.strip() == '':
+            raise ValueError('Invalid username.')
+        if password is None or password.strip() == '':
+            raise ValueError('Invalid password.')
         self.__website = website
         self.__username = username
         self.__password = password
