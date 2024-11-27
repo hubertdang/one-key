@@ -50,12 +50,12 @@ class PasswordManager:
             self.__users[new_username] = self.__users.pop(old_username)
         return result 
 
+    def get_credential(self, username: str, website: str):
+        return self.__get_user(username).get_credential(website)
+
     def add_credential(self, username: str, credential: Credential):
         return self.__get_user(username).add_credential(credential)
 
     def remove_credential(self, username: str, website: str):
         return self.__get_user(username).remove_credential(website)
-
-    def get_credential(self, username: str, website: str):
-        return self.__get_user(username).get_credential(website)
 
