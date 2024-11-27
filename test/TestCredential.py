@@ -27,6 +27,19 @@ class TestCredential(unittest.TestCase):
         with self.assertRaises(ValueError):
             Credential('', 'name', '  ')
 
+    def test_eq(self):
+        c1 = Credential('x.com', 'hbrt', 'pswd')
+        c2 = Credential('x.com', 'hbrt', 'pswd')
+        self.assertTrue(c1 == c2)
+
+        c2.set_website('y.com')
+        self.assertFalse(c1 == c2)
+
+        c2 = Credential('x.com', 'hbrt', 'diff')
+        self.assertFalse(c1 == c2)
+
+        c2 = Credential('x.com', 'asdf', 'pswd')
+        self.assertFalse(c1 == c2)
 
     def test_str(self):
         c = Credential('x.com', 'hbrt', 'pswd')

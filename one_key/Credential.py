@@ -32,6 +32,27 @@ class Credential:
         self.__username = username
         self.__password = password
 
+    def __eq__(self, other):
+        """
+        Checks if two Credential objects are equal.
+
+        Args:
+            other: The other Credential object.
+
+        Returns:
+           bool: True if they are equal, False otherwise.
+
+        """
+        if not isinstance(other, Credential):
+            return False
+        if other.get_website() != self.__website:
+            return False
+        if other.get_username() != self.__username:
+            return False
+        if other.get_password() != self.__password:
+            return False
+        return True
+
     def get_website(self):
         """
         Gets the website the credential is used for.
