@@ -115,12 +115,31 @@ class TestUser(unittest.TestCase):
         self.assertFalse(u.set_username('pina'))
         self.assertEqual(u.get_username(), 'bina')
 
+    def test_get_credential(self):
+        u = User('dina', 'key')
+
     def test_add_credential(self):
         u = User('dina', 'key')
+        u.sign_in('key')
+
+        c1 = Credential('x.com', 'uname', 'pswd')
+
+        self.assertTrue(u.add_credential(c1))
+        self.assertEqual(u.get_credential(c1.get_website()), c1)
+
+        c2 = Credential('x.com', 'diff', 'diff')
+
+        self.assertFalse(u.add_credential(c2))
+        self.assertEqual(u.get_credential(c2.get_website()), c1)
 
     def test_remove_credential(self):
         u = User('dina', 'key')
+        u.sign_in('key')
+        
+        self.assertFalse(u.remove_credential('x.com'))
 
-    def test_get_credential(self):
-        u = User('dina', 'key')
+        c1 = Credential('x.com', 'uname', 'pswd')
+        u.add_credential(c1)
+        self.assertFalse(u.remove_credential('twitter.com'))
+        self.assertTrue(u.remove_credential('x.com'))
 

@@ -41,11 +41,12 @@ class User:
             other: The other User object.
 
         Returns:
-            True if they are equal, False otherwise.
+            bool: True if they are equal, False otherwise.
 
         """
         if not isinstance(other, User):
             return False
+        # directly reference fields because of sign-in mechanism
         if other._User__username != self.__username:
             return False
         if other._User__key != self.__key:
@@ -147,6 +148,23 @@ class User:
         self.__username = username
         return True
 
+    def get_credential(self, website: str):
+        """
+        Get a credential for a website from the user's collection of credentials.
+
+        Args:
+            website: The website to get the credential for.
+
+        Returns:
+            Credential: the credential if it exists and the user is signed in, None otherwise. 
+
+        """
+        if not self.is_signed_in():
+            return None
+        if website not in self.__credentials:
+            return None
+        return self.__credentials[website]
+
     def add_credential(self, credential: Credential):
         """
         Add a credential to the user's collection of credentials.
@@ -158,9 +176,13 @@ class User:
             bool: True if the credential was added successfully, False otherwise.
 
         """
+        website = credential.get_website()
+
         if not self.is_signed_in():
             return False
-        self.__credentials[credential.get_website] = credential
+        if website in self.__credentials:
+            return False
+        self.__credentials[website] = credential
         return True
 
     def remove_credential(self, website: str):
@@ -176,21 +198,8 @@ class User:
         """
         if not self.is_signed_in():
             return False
+        if website not in self.__credentials:
+            return False
         del self.__credentials[website]
         return True
-
-    def get_credential(self, website: str):
-        """
-        Get a credential for a website from the user's collection of credentials.
-
-        Args:
-            website: The website to get the credential for.
-
-        Returns:
-            
-
-        """
-        if not self.is_signed_in():
-            return None
-        return self.__credentials[website]
 
