@@ -77,8 +77,14 @@ class User:
         """
         Signs the user out.
 
+        Returns:
+            bool: True if the user successfully signed out, False otherwise. 
+
         """
+        if not self.is_signed_in():
+            return False
         self.__signed_in = False
+        return True
 
     def is_signed_in(self):
         """

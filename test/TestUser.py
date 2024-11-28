@@ -61,9 +61,9 @@ class TestUser(unittest.TestCase):
     def test_sign_out(self):
         u = User('dina', 'key')
         u.sign_in('key')
-        u.sign_out()
+        self.assertTrue(u.sign_out())
         self.assertFalse(u.is_signed_in())
-        u.sign_out()
+        self.assertFalse(u.sign_out())
         self.assertFalse(u.is_signed_in())
 
     def test_is_signed_in(self):
@@ -142,4 +142,7 @@ class TestUser(unittest.TestCase):
         u.add_credential(c1)
         self.assertFalse(u.remove_credential('twitter.com'))
         self.assertTrue(u.remove_credential('x.com'))
+
+    def test_get_websites(self):
+        self.assertTrue(False)
 
