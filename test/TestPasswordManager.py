@@ -108,18 +108,6 @@ class TestPasswordManager(unittest.TestCase):
         pm.sign_in('hbrt', 'key')
         self.assertTrue(pm.sign_out('hbrt'))
 
-    def test_is_signed_in(self):
-        pm = PasswordManager()
-        u1 = User('hbrt', 'key')
-
-        self.assertFalse(pm.is_signed_in('hbrt'))
-
-        pm.add_user(u1)
-        self.assertFalse(pm.is_signed_in('hbrt'))
-
-        pm.sign_in('hbrt', 'key')
-        self.assertTrue(pm.is_signed_in('hbrt'))
-
     def test_get_key(self):
         pm = PasswordManager()
         u1 = User('hbrt', 'key')

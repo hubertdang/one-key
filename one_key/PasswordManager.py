@@ -8,6 +8,7 @@ class PasswordManager:
 
     Attributes:
         __users: The dictionary of users.
+        __curr_user: The currently signed in user.
 
     """
 
@@ -17,6 +18,7 @@ class PasswordManager:
 
         """
         self.__users = {}
+        self.__curr_user = None
 
     def add_user(self, user: User):
         """
@@ -50,7 +52,7 @@ class PasswordManager:
             return False
         del self.__users[username]
         return True
-    
+
     def get_num_users(self):
         """
         Gets the password manager's number of users.
@@ -83,11 +85,38 @@ class PasswordManager:
             username: The username of the user to get.
 
         Returns:
-            User:The user whose username matches the parameter 'username'. None if the user
+            User: The user whose username matches the parameter 'username'. None if the user
             does not exist.
 
         """
         return self.__users.get(username)
+
+    def __get_curr_user(self):
+        """
+        Gets the currently signed in user.
+
+        Returns:
+            User: The currently signed in user.
+        """
+        return self.__curr_user
+
+    def __set_curr_user(self, user: User):
+        """
+        Sets the currently signed in user.
+
+        """
+        self.__curr_user = user
+
+    def anyone_signed_in(self):
+        """
+        Checks if anyone is signed in.
+
+        Returns:
+            bool: True if someone is signed in, False otherwise.
+        """
+        if self.__get_curr_user() is None:
+            return False
+        return True
 
     def sign_in(self, username: str, key: str):
         """
@@ -104,6 +133,9 @@ class PasswordManager:
         user = self.__get_user(username)
         if user is None:
             return False
+        if self.__get_curr_user() is not user:
+            return False
+        self.__set_curr_user(user)
         return user.sign_in(key)
 
     def sign_out(self, username: str):
@@ -120,23 +152,10 @@ class PasswordManager:
         user = self.__get_user(username)
         if user is None:
             return False
-        return user.sign_out()
-
-    def is_signed_in(self, username: str):
-        """
-        Checks if a user is signed in.
-
-        Args:
-            username: The user's username.
-
-        Returns:
-            bool: True if the user is signed in, False otherwise. 
-
-        """
-        user = self.__get_user(username)
-        if user is None:
+        if self.__get_curr_user() is not user:
             return False
-        return user.is_signed_in()
+        self.__set_curr_user(None)
+        return user.sign_out()
 
     def get_key(self, username: str):
         """
