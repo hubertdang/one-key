@@ -2,60 +2,230 @@ from one_key.User import User
 from one_key.Credential import Credential
 
 class PasswordManager:
+    """
+    A class to represent a password manager.
+
+    Attributes:
+        __users: The dictionary of users.
+
+    """
     def __init__(self):
+        """
+        Initializes a new PasswordManager instance.
+
+        """
         self.__users = {}
 
     def add_user(self, user: User):
+        """
+        Adds a user to the password manager.
+
+        Args:
+            user: The user to add to the password manager.
+
+        Returns:
+           bool: True if the user was successfully added, False otherwise. 
+
+        """
         username = user.get_username()
-        if username in self.__users:
+        if self.__get_user(username) is not None:
             return False
         self.__users[username] = user
         return True
 
     def remove_user(self, username: str):
-        if username not in self.__users:
+        """
+        Removes a user from the password manager.
+
+        Args:
+            username: The username of the user to remove.
+
+        Returns:
+            bool: True if the user was successfully removed, False otherwise. 
+
+        """
+        if self.__get_user(username) is None:
             return False
         del self.__users[username]
         return True
 
     def is_valid_user(self, username: str):
-        if __get_user(username) is None:
+        """
+        Checks if a username belongs to a valid user.
+
+        Args:
+            username: The username of the user to check.
+
+        Returns:
+            bool: True if the username belongs to a valid user, False otherwise. 
+
+        """
+        if self.__get_user(username) is None:
             return False
         return True
 
     def __get_user(self, username: str):
+        """
+        Gets a user from the password manager's users dictionary.
+
+        Args:
+            username: The username of the user to get.
+
+        Returns:
+            User:The user whose username matches the parameter 'username'. None if the user
+            does not exist.
+
+        """
         return self.__users.get(username)
 
     def sign_in(self, username: str, key: str):
+        """
+        Signs in a user of the password manager.
+
+        Args:
+            username: The user's username.
+            key: The user's key.
+
+        Returns:
+            bool: True if the user was successfully signed in, False otherwise.
+
+        """
+        user = self.__get_user(username)
+        if user is None:
+            return False
         return user.sign_in(key)
 
     def sign_out(self, username: str):
-        user.sign_out()
+        """
+        Signs out a user of the password manager.
+
+        Args:
+            username: The user's username.
+
+        Returns:
+            bool: True if the user was successfully signed out, False otherwise. 
+
+        """
+        user = self.__get_user(username)
+        if user is None:
+            return False
+        return user.sign_out()
 
     def is_signed_in(self, username: str):
-        return self.__get_user(username).is_signed_in()
+        """
+        Checks if a user is signed in.
+
+        Args:
+            username: The user's username.
+
+        Returns:
+            bool: True if the user is signed in, False otherwise. 
+
+        """
+        user = self.__get_user(username)
+        if user is None:
+            return False
+        return user.is_signed_in()
 
     def get_key(self, username: str):
-        return self.__get_user(username).get_key()
+        """
+        Gets a user's key.
+
+        Args:
+            username: The user's username.
+
+        Returns:
+            str: The user's key if they are signed in, None otherwise. 
+
+        """
+        user = self.__get_user(username)
+        if user is None:
+            return None
+        return user.get_key()
 
     def set_key(self, username: str, key: str):
-        return self.__get_user(username).set_key(key)
+        """
+        Sets a user's key.
 
-    def get_username(self, username: str):
-        return self.__get_user(username).get_username()
+        Args:
+            username: The user's username.
+            key: The user's new key.
+
+        Returns:
+            bool: True if the user's new key was set successfully, False otherwise. 
+
+        """
+        user = self.__get_user(username)
+        if user is None:
+            return False
+        return user.set_key(key)
 
     def set_username(self, old_username: str, new_username: str):
-        result = self.__get_user(old_username).set_username(new_username)
+        """
+        Set's a user's username.
+
+        Args:
+            old_username: The user's old username.
+            new_username: The user's new username.
+
+        Returns:
+            bool: True if the user's new username was successfully set, False otherwise. 
+
+        """
+        user = self.__get_user(old_username)
+        if user is None:
+            return False
+        result = user.set_username(new_username)
         if result:
+            # the username-user key-value pair is still using the old username, so update it
             self.__users[new_username] = self.__users.pop(old_username)
         return result 
 
     def get_credential(self, username: str, website: str):
+        """
+        Get's a user's credential for a website.
+
+        Args:
+            username: The user's username.
+            website: The website of the credential to get.
+
+        Returns:
+            Credential: The user's credential for the given website.
+        """
+        user = self.__get_user(username)
+        if user is None:
+            return None
         return self.__get_user(username).get_credential(website)
 
     def add_credential(self, username: str, credential: Credential):
+        """
+        Adds a credential to the user's dictionary of credentials.
+
+        Args:
+            username: The user's username.
+            credential: The credential to add.
+
+        Returns:
+            bool: True if the credential was added successfully, False otherwise.
+        """
+        user = self.__get_user(username)
+        if user is None:
+            return False
         return self.__get_user(username).add_credential(credential)
 
     def remove_credential(self, username: str, website: str):
+        """
+        Removes a credential from the user's dictionary of credentials.
+
+        Args:
+            username: The user's username.
+            website: The website of the credential to remove.
+
+        Returns:
+            bool: True if the credential was removed successfully, False otherwise.
+        """
+        user = self.__get_user(username)
+        if user is None:
+            return False
         return self.__get_user(username).remove_credential(website)
 
