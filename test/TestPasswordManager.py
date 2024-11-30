@@ -42,6 +42,28 @@ class TestPasswordManager(unittest.TestCase):
         self.assertTrue(pm.remove_user(u1.get_username()))
         self.assertTrue(pm.remove_user(u2.get_username()))
 
+    def test_get_num_users(self):
+        pm = PasswordManager()
+
+        u1 = User('hbrt', 'key')
+        u2 = User('saal', 'orange')
+        u3 = User('matt', 'key3')
+
+        self.assertEqual(pm.get_num_users(), 0)
+
+        pm.add_user(u1)
+        self.assertEqual(pm.get_num_users(), 1)
+
+        pm.add_user(u2)
+        self.assertEqual(pm.get_num_users(), 2)
+
+        pm.remove_user('saal')
+        self.assertEqual(pm.get_num_users(), 1)
+
+        pm.add_user(u2)
+        pm.add_user(u3)
+        self.assertEqual(pm.get_num_users(), 3)
+
     def test_is_valid_user(self):
         pm = PasswordManager()
 

@@ -50,6 +50,15 @@ class PasswordManager:
             return False
         del self.__users[username]
         return True
+    
+    def get_num_users(self):
+        """
+        Gets the password manager's number of users.
+
+        Returns:
+            int: The number of users.
+        """
+        return len(self.__users)
 
     def is_valid_user(self, username: str):
         """
