@@ -5,6 +5,7 @@ from one_key.Credential import Credential
 
 import unittest
 
+
 class TestPasswordManager(unittest.TestCase):
     def test_init(self):
         pm = PasswordManager()
@@ -43,18 +44,18 @@ class TestPasswordManager(unittest.TestCase):
 
     def test_is_valid_user(self):
         pm = PasswordManager()
-        
+
         u1 = User('hbrt', 'key')
         u2 = User('saal', 'orange')
 
         self.assertFalse(pm.is_valid_user('hbrt'))
-        
+
         pm.add_user(u1)
         self.assertTrue(pm.is_valid_user('hbrt'))
 
         pm.add_user(u2)
         self.assertTrue(pm.is_valid_user('saal'))
-        
+
         pm.remove_user('hbrt')
         self.assertFalse(pm.is_valid_user('hbrt'))
 
@@ -79,7 +80,7 @@ class TestPasswordManager(unittest.TestCase):
         u1 = User('hbrt', 'key')
 
         self.assertFalse(pm.sign_out('hbrt'))
-        
+
         pm.add_user(u1)
         self.assertFalse(pm.sign_out('hbrt'))
         pm.sign_in('hbrt', 'key')
@@ -102,7 +103,7 @@ class TestPasswordManager(unittest.TestCase):
         u1 = User('hbrt', 'key')
 
         self.assertEqual(pm.get_key('hbrt'), None)
-        
+
         pm.add_user(u1)
         self.assertEqual(pm.get_key('hbrt'), None)
 
@@ -180,4 +181,3 @@ class TestPasswordManager(unittest.TestCase):
         pm.sign_in('hbrt', 'key')
         pm.add_credential('hbrt', c1)
         self.assertTrue(pm.remove_credential('hbrt', 'x.com'))
-

@@ -1,6 +1,7 @@
 from one_key.User import User
 from one_key.Credential import Credential
 
+
 class PasswordManager:
     """
     A class to represent a password manager.
@@ -9,6 +10,7 @@ class PasswordManager:
         __users: The dictionary of users.
 
     """
+
     def __init__(self):
         """
         Initializes a new PasswordManager instance.
@@ -179,7 +181,7 @@ class PasswordManager:
         if result:
             # the username-user key-value pair is still using the old username, so update it
             self.__users[new_username] = self.__users.pop(old_username)
-        return result 
+        return result
 
     def get_credential(self, username: str, website: str):
         """
@@ -228,4 +230,3 @@ class PasswordManager:
         if user is None:
             return False
         return self.__get_user(username).remove_credential(website)
-

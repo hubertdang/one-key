@@ -1,5 +1,6 @@
 from one_key.Credential import Credential
 
+
 class User:
     """
     A class to represent a user of the password manager.
@@ -208,4 +209,3 @@ class User:
             return False
         del self.__credentials[website]
         return True
-

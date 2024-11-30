@@ -4,13 +4,14 @@ from one_key.Credential import Credential
 
 import unittest
 
+
 class TestUser(unittest.TestCase):
     def test_init(self):
         u = User('dina', 'key1')
         u.sign_in('key1')
         self.assertEqual(u.get_username(), 'dina')
         self.assertEqual(u.get_key(), 'key1')
-        
+
         with self.assertRaises(ValueError):
             u = User('', '')
 
@@ -135,12 +136,10 @@ class TestUser(unittest.TestCase):
     def test_remove_credential(self):
         u = User('dina', 'key')
         u.sign_in('key')
-        
+
         self.assertFalse(u.remove_credential('x.com'))
 
         c1 = Credential('x.com', 'uname', 'pswd')
         u.add_credential(c1)
         self.assertFalse(u.remove_credential('twitter.com'))
         self.assertTrue(u.remove_credential('x.com'))
-
-

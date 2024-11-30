@@ -122,4 +122,3 @@ class Credential:
 
         """
         return f'Website: {self.__website}; Username: {self.__username}; Password: {self.__password}'
-
