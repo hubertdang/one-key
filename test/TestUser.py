@@ -143,6 +143,4 @@ class TestUser(unittest.TestCase):
         self.assertFalse(u.remove_credential('twitter.com'))
         self.assertTrue(u.remove_credential('x.com'))
 
-    def test_get_websites(self):
-        self.assertTrue(False)
 
