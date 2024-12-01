@@ -90,7 +90,7 @@ def main():
         print()
         parser.print_help()
 
-        pm.save_data()
+    pm.save_data()
 
 if __name__ == '__main__':
     main()
