@@ -53,7 +53,10 @@ class PasswordManager:
             bool: True if the user was successfully removed, False otherwise. 
 
         """
-        if self.__get_user(username) is None:
+        user = self.__get_user(username)
+        if user is None:
+            return False
+        if self.__get_curr_user is not user:
             return False
         del self.__users[username]
         return True
