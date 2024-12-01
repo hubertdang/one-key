@@ -53,11 +53,9 @@ class PasswordManager:
             bool: True if the user was successfully removed, False otherwise. 
 
         """
-        user = self.__get_user(username)
-        if user is None:
+        if not self.is_signed_in(username):
             return False
-        if self.__get_curr_user is not user:
-            return False
+        self.sign_out(username)
         del self.__users[username]
         return True
 
@@ -70,7 +68,7 @@ class PasswordManager:
         """
         return len(self.__users)
 
-    def is_valid_user(self, username: str):
+    def user_exists(self, username: str):
         """
         Checks if a username belongs to a valid user.
 
@@ -138,13 +136,15 @@ class PasswordManager:
             bool: True if the user was successfully signed in, False otherwise.
 
         """
-        user = self.__get_user(username)
-        if user is None:
+        if not self.user_exists(username):
             return False
-        if self.__get_curr_user() is not None:
+        if self.anyone_signed_in():
+            return False
+        user = self.__get_user(username)
+        if not user.sign_in(key):
             return False
         self.__set_curr_user(user)
-        return user.sign_in(key)
+        return True
 
     def sign_out(self, username: str):
         """
@@ -157,13 +157,22 @@ class PasswordManager:
             bool: True if the user was successfully signed out, False otherwise. 
 
         """
-        user = self.__get_user(username)
-        if user is None:
-            return False
-        if self.__get_curr_user() is not user:
+        if not self.is_signed_in(username):
             return False
         self.__set_curr_user(None)
-        return user.sign_out()
+        return self.__get_user(username).sign_out()
+    
+    def is_signed_in(self, username: str):
+        """Checks if a user is signed in.
+
+        Args:
+            username (str): The user's username.
+        """
+        if not self.user_exists(username):
+            return False
+        if self.__get_curr_user() is not self.__get_user(username):
+            return False
+        return True
 
     def get_key(self, username: str):
         """
@@ -176,10 +185,9 @@ class PasswordManager:
             str: The user's key if they are signed in, None otherwise. 
 
         """
-        user = self.__get_user(username)
-        if user is None:
+        if not self.is_signed_in(username):
             return None
-        return user.get_key()
+        return self.__get_user(username).get_key()
 
     def set_key(self, username: str, key: str):
         """
@@ -193,10 +201,9 @@ class PasswordManager:
             bool: True if the user's new key was set successfully, False otherwise. 
 
         """
-        user = self.__get_user(username)
-        if user is None:
+        if not self.is_signed_in(username):
             return False
-        return user.set_key(key)
+        return self.__get_user(username).set_key(key)
 
     def set_username(self, old_username: str, new_username: str):
         """
@@ -210,10 +217,9 @@ class PasswordManager:
             bool: True if the user's new username was successfully set, False otherwise. 
 
         """
-        user = self.__get_user(old_username)
-        if user is None:
+        if not self.is_signed_in(old_username):
             return False
-        result = user.set_username(new_username)
+        result = self.__get_user(old_username).set_username(new_username)
         if result:
             # the username-user key-value pair is still using the old username, so update it
             self.__users[new_username] = self.__users.pop(old_username)
@@ -230,9 +236,8 @@ class PasswordManager:
         Returns:
             Credential: The user's credential for the given website.
         """
-        user = self.__get_user(username)
-        if user is None:
-            return None
+        if not self.is_signed_in(username):
+            return False
         return self.__get_user(username).get_credential(website)
 
     def add_credential(self, username: str, credential: Credential):
@@ -246,8 +251,7 @@ class PasswordManager:
         Returns:
             bool: True if the credential was added successfully, False otherwise.
         """
-        user = self.__get_user(username)
-        if user is None:
+        if not self.is_signed_in(username):
             return False
         return self.__get_user(username).add_credential(credential)
 
@@ -262,8 +266,7 @@ class PasswordManager:
         Returns:
             bool: True if the credential was removed successfully, False otherwise.
         """
-        user = self.__get_user(username)
-        if user is None:
+        if not self.is_signed_in(username):
             return False
         return self.__get_user(username).remove_credential(website)
 
