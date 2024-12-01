@@ -35,7 +35,6 @@ class TestPasswordManager(unittest.TestCase):
 
         self.assertFalse(pm.remove_user(u2.get_username()))
         self.assertTrue(pm.remove_user(u1.get_username()))
-        #self.assertFalse(pm.is_valid_user('hbrt'))
 
         pm.add_user(u1)
         pm.add_user(u2)
