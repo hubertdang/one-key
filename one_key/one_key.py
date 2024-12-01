@@ -2,31 +2,92 @@ from one_key.User import User
 from one_key.Credential import Credential
 from one_key.PasswordManager import PasswordManager
 
+import os
 import argparse
+import getpass
 
 MIN_USERS = 0  # min num users required to run commands other than --add-user
+USER = os.environ.get('USER')
+
+
+def prompt_y_n(msg: str):
+    """Prompts a yes or no message.
+
+    Args:
+        msg (str): The prompt message.
+
+    Returns:
+        bool: True if the user replied yes, False otherwise.
+    """
+    while True:
+        response = input(f'{msg} (y/n): ').strip().lower()
+        if response in ['y', 'yes']:
+            return True
+        elif response in ['n', 'no']:
+            return False
+        else:
+            print("Please enter 'y' or 'n'.")
+
+
+def prompt_password(msg: str):
+    """Prompts the user for a password.
+
+    Args:
+        msg (str): The prompt message.
+
+    Returns:
+        str: The password entered by the user
+    """
+    return getpass.getpass(f'{msg}')
 
 
 def main():
+    """Main entry point of the one_key application.
+    """
     parser = argparse.ArgumentParser()
     options = parser.add_mutually_exclusive_group()
 
-    options.add_argument('--add-user', action='store_true',
-                         help='add a user to the password manager')
     options.add_argument('--sign-in', action='store_true',
                          help='sign yourself in')
     options.add_argument('--delete-acc', action='store_true',
-                         help='deletes your account and its credentials')
+                         help='delete your user account and your credentials')
     options.add_argument('--sign-out', action='store_true',
                          help='sign yourself out')
     options.add_argument('--reset-key', action='store_true',
                          help='reset your key')
     options.add_argument('--reset-username',
                          action='store_true', help='reset your username')
+    # TODO: add options for credential management
 
     args = parser.parse_args()
 
     pm = PasswordManager()
+
+    if not pm.is_valid_user(USER):
+        create_acc = prompt_y_n(
+            'You do not have an account yet, would you like to create one?')
+        print()
+        if not create_acc:
+            return
+        print(f'Creating an account under username: {USER}')
+        print()
+        while True:
+            u_key = prompt_password(
+                'Please enter a key to use to access your account: ')
+            u_key_confirm = prompt_password(
+                'Please re-enter the key to confirm: ')
+            if u_key_confirm == u_key:
+                break
+            print()
+            print('Sorry, the keys you entered do not match.')
+            print()
+        u = User(USER, u_key)
+        if not pm.add_user(u):
+            return
+        print()
+        print(f'Successfully added {USER} as a user!')
+        print()
+        parser.print_help()
 
 
 if __name__ == '__main__':
