@@ -1,6 +1,9 @@
 from one_key.User import User
 from one_key.Credential import Credential
 
+import pickle
+import os
+
 
 class PasswordManager:
     """
@@ -12,13 +15,15 @@ class PasswordManager:
 
     """
 
-    def __init__(self):
+    def __init__(self, data_file='data/password_manager.pkl'):
         """
         Initializes a new PasswordManager instance.
 
         """
+        self.data_file = data_file
         self.__users = {}
         self.__curr_user = None
+        self.load_data()
 
     def add_user(self, user: User):
         """
@@ -258,3 +263,20 @@ class PasswordManager:
         if user is None:
             return False
         return self.__get_user(username).remove_credential(website)
+
+    def save_data(self):
+        """Serializes and saves the password manager state.
+        """
+        data = {'users': self.__users, 'curr_user': self.__curr_user}
+        with open(self.data_file, 'wb') as f:
+            pickle.dump(data, f)
+
+    def load_data(self):
+        """Deserializes and loads the password manager state from data/password_manager.pkl
+        """
+        if not os.path.exists(self.data_file):
+            return
+        with open(self.data_file, 'rb') as f:
+            data = pickle.load(f)
+            self.__users = data.get('users')
+            self.__curr_user = data.get('curr_user')

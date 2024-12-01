@@ -62,6 +62,7 @@ def main():
     args = parser.parse_args()
 
     pm = PasswordManager()
+    pm.load_data()
 
     if not pm.is_valid_user(USER):
         create_acc = prompt_y_n(
@@ -89,6 +90,7 @@ def main():
         print()
         parser.print_help()
 
+        pm.save_data()
 
 if __name__ == '__main__':
     main()
