@@ -133,7 +133,7 @@ class PasswordManager:
         user = self.__get_user(username)
         if user is None:
             return False
-        if self.__get_curr_user() is not user:
+        if self.__get_curr_user() is not None:
             return False
         self.__set_curr_user(user)
         return user.sign_in(key)
