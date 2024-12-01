@@ -59,16 +59,15 @@ def main():
                          action='store_true', help='reset your username')
     # TODO: add options for credential management
 
-    args = parser.parse_args()
-
     pm = PasswordManager()
 
     if not pm.is_valid_user(USER):
+        print()
         create_acc = prompt_y_n(
             'You do not have an account yet, would you like to create one?')
         print()
         if not create_acc:
-            return
+            return # ok to do because nothing to save yet
         print(f'Creating an account under username: {USER}')
         print()
         while True:
@@ -83,24 +82,36 @@ def main():
             print()
         u = User(USER, u_key)
         if not pm.add_user(u):
-            return
+            return # ok to do because nothing to save yet
         print()
         print(f'Successfully added {USER} as a user!')
         print()
         parser.print_help()
 
+    # work for the argument/option provided starts here:
+    args = parser.parse_args()
+    if not any(vars(args).values()):
+        print()
+        print("No options passed, nothing to do!")
+        print()
+        parser.print_help()
+
     if args.sign_in:
+        print()
         input_key = prompt_password('Please enter your key: ')
         success = pm.sign_in(USER, input_key)
         if not success:
             print('Failed to sign in.')
-        print('Successfully signed in.')
+        else:
+            print('Successfully signed in.')
 
     if args.delete_acc:
+        print()
         success = pm.remove_user(USER)
         if not success:
             print('Failed to delete your acount.')
-        print('Successfully deleted your account.')
+        else:
+            print('Successfully deleted your account.')
 
     pm.save_data()
 
