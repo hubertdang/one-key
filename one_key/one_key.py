@@ -62,7 +62,6 @@ def main():
     args = parser.parse_args()
 
     pm = PasswordManager()
-    pm.load_data()
 
     if not pm.is_valid_user(USER):
         create_acc = prompt_y_n(
@@ -90,7 +89,21 @@ def main():
         print()
         parser.print_help()
 
+    if args.sign_in:
+        input_key = prompt_password('Please enter your key: ')
+        success = pm.sign_in(USER, input_key)
+        if not success:
+            print('Failed to sign in.')
+        print('Successfully signed in.')
+
+    if args.delete_acc:
+        success = pm.remove_user(USER)
+        if not success:
+            print('Failed to delete your acount.')
+        print('Successfully deleted your account.')
+
     pm.save_data()
+
 
 if __name__ == '__main__':
     main()
