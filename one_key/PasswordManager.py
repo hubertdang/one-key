@@ -161,7 +161,7 @@ class PasswordManager:
             return False
         self.__set_curr_user(None)
         return self.__get_user(username).sign_out()
-    
+
     def is_signed_in(self, username: str):
         """Checks if a user is signed in.
 
@@ -234,7 +234,8 @@ class PasswordManager:
             website: The website of the credential to get.
 
         Returns:
-            Credential: The user's credential for the given website.
+            Credential: The user's credential for the given website. None if a credential for the
+            given website doesn't exist.
         """
         if not self.is_signed_in(username):
             return False
