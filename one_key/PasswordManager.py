@@ -116,6 +116,14 @@ class PasswordManager:
         """
         self.__curr_user = user
 
+    def get_curr_user_username(self):
+        """Get the currently signed in user's username.
+
+        Returns:
+            str: The currently signed in user's username.
+        """
+        return self.__get_curr_user().get_username()
+
     def anyone_signed_in(self):
         """
         Checks if anyone is signed in.

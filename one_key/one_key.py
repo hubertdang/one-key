@@ -107,6 +107,8 @@ def main():
     parser = argparse.ArgumentParser()
     options = parser.add_mutually_exclusive_group()
 
+    options.add_argument('--status', action='store_true',
+                         help='get status of current user')
     options.add_argument('--sign-in', action='store_true',
                          help='sign yourself in')
     options.add_argument('--del-acc', action='store_true',
@@ -133,7 +135,7 @@ def main():
         print()
         if not create_acc:
             return  # ok to do because nothing to save yet
-        print(f'Creating an account under username: {USER}')
+        print(f'Creating an account for: {USER}')
         print()
         while True:
             u_key = prompt_password(
@@ -157,9 +159,17 @@ def main():
     # work for the argument/option provided starts here:
     args = parser.parse_args()
     if not any(vars(args).values()):
-        print("No options passed, nothing to do!")
+        print('No options passed, nothing to do!')
         print()
         parser.print_help()
+        print()
+
+    if args.status:
+        if not pm.anyone_signed_in:
+            print('No one is signed in.')
+            print()
+        curr_user = pm.get_curr_user_username()
+        print(f'Current user signed in: {curr_user}')
         print()
 
     if args.sign_in:
