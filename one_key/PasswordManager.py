@@ -14,13 +14,16 @@ class PasswordManager:
         __curr_user: The currently signed in user.
 
     """
+    DATA_DIR = 'data'
+    PM_SAVE_FILE = 'password_manager.pkl'
+    PM_SAVE_FILE_PATH = os.path.join(DATA_DIR, PM_SAVE_FILE)
 
-    def __init__(self, data_file='data/password_manager.pkl'):
+    def __init__(self, data_file=PM_SAVE_FILE_PATH):
         """
         Initializes a new PasswordManager instance.
 
         """
-        self.data_file = data_file
+        self.__data_file = data_file
         self.__users = {}
         self.__curr_user = None
         self.load_data()
@@ -275,15 +278,18 @@ class PasswordManager:
         """Serializes and saves the password manager state.
         """
         data = {'users': self.__users, 'curr_user': self.__curr_user}
-        with open(self.data_file, 'wb') as f:
+        if not os.path.exists(self.DATA_DIR):
+            os.makedirs(self.DATA_DIR)
+            
+        with open(self.__data_file, 'wb+') as f:
             pickle.dump(data, f)
 
     def load_data(self):
         """Deserializes and loads the password manager state from data/password_manager.pkl
         """
-        if not os.path.exists(self.data_file):
+        if not os.path.exists(self.__data_file):
             return
-        with open(self.data_file, 'rb') as f:
+        with open(self.__data_file, 'rb') as f:
             data = pickle.load(f)
             self.__users = data.get('users')
             self.__curr_user = data.get('curr_user')
