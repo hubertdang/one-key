@@ -24,6 +24,7 @@ def bad_str(in_str: str):
         return True
     return False
 
+
 def prompt_y_n(msg: str):
     """Prompts a yes or no message.
 
@@ -60,6 +61,7 @@ def prompt_password(msg: str):
             continue
         break
     return password
+
 
 def prompt_str(msg: str):
     """Prompts the user for a string that doesn't need to be hidden.
@@ -232,7 +234,8 @@ def main():
             print()
             pm.save_data()
             return
-        ws = prompt_str('Please enter the website of the credential to remove: ')
+        ws = prompt_str(
+            'Please enter the website of the credential to remove: ')
         success = pm.remove_credential(USER, ws)
         if not success:
             print(f'A credential for {ws} does not exist for {USER}.')

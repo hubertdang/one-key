@@ -280,7 +280,6 @@ class PasswordManager:
         data = {'users': self.__users, 'curr_user': self.__curr_user}
         if not os.path.exists(self.DATA_DIR):
             os.makedirs(self.DATA_DIR)
-            
         with open(self.__data_file, 'wb+') as f:
             pickle.dump(data, f)
 
