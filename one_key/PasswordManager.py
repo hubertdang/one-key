@@ -282,6 +282,19 @@ class PasswordManager:
             return False
         return self.__get_user(username).remove_credential(website)
 
+    def list_credentials(self, username: str):
+        """Lists a user's credentials.
+
+        Args:
+            username (str): The user's username.
+
+        Returns:
+            str: A list of the user's credentials as a string.
+        """
+        if not self.is_signed_in(username):
+            return False
+        return self.__get_user(username).list_credentials()
+
     def save_data(self):
         """Serializes and saves the password manager state.
         """

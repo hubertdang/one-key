@@ -260,6 +260,8 @@ def main():
             print_failure('You must sign in to list credentials.')
             pm.save_data()
             return
+        print()
+        print(pm.list_credentials(USER))
 
     pm.save_data()
 

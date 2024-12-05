@@ -209,3 +209,28 @@ class User:
             return False
         del self.__credentials[website]
         return True
+
+    def list_credentials(self):
+        """List the user's credentials.
+
+        Returns:
+            str: The list of the user's credentials as a string.
+        """
+        if not self.is_signed_in():
+            return False
+        headers = ["Website", "Username", "Password"]
+        rows = [headers] + [[cred.get_website(), cred.get_username(), cred.get_password()]
+                            for cred in self.__credentials.values()]
+        column_widths = [max(len(str(item)) for item in col)
+                         for col in zip(*rows)]
+        total_width = sum(column_widths) + (len(column_widths) - 1) * 2
+        border_line = '=' * total_width + '\n'
+
+        cred_list = ''
+        cred_list += "  ".join(f"{header.ljust(width)}" for header, width in zip(headers, column_widths)) + '\n'
+        cred_list += border_line
+        for row in rows[1:]:
+            cred_list += "  ".join(f"{str(item).ljust(width)}" for item,
+                                   width in zip(row, column_widths)) + '\n'
+
+        return cred_list
