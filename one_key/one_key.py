@@ -58,7 +58,6 @@ def prompt_password(msg: str):
         password = getpass.getpass(f'{msg}')
         if bad_str(password):
             print('Your password must not be blank and cannot contain spaces.')
-            print()
             continue
         break
     return password
@@ -77,7 +76,6 @@ def prompt_str(msg: str):
         resp = input(msg)
         if bad_str(resp):
             print('Blank strings and spaces are not permitted.')
-            print()
             continue
         break
     return resp
@@ -100,6 +98,14 @@ def print_failure(msg: str):
     """
     print('[' + Fore.RED + 'FAILURE' + Style.RESET_ALL + '] ' + msg)
 
+def print_warning(msg: str):
+    """Prints a warning message
+
+    Args:
+        msg (str): The warning message.
+    """
+    print('[' + Fore.YELLOW + 'WARNING' + Style.RESET_ALL + '] ' + msg)
+
 
 def main():
     """Main entry point of the one_key application.
@@ -107,8 +113,6 @@ def main():
     parser = argparse.ArgumentParser()
     options = parser.add_mutually_exclusive_group()
 
-    options.add_argument('--status', action='store_true',
-                         help='get status of current user')
     options.add_argument('--sign-in', action='store_true',
                          help='sign yourself in')
     options.add_argument('--del-acc', action='store_true',
@@ -117,8 +121,6 @@ def main():
                          help='sign yourself out')
     options.add_argument('--reset-key', action='store_true',
                          help='reset your key')
-    options.add_argument('--reset-username',
-                         action='store_true', help='reset your username')
     options.add_argument('--get-cred', action='store_true',
                          help='get a credential')
     options.add_argument('--add-cred', action='store_true',
@@ -129,14 +131,11 @@ def main():
     pm = PasswordManager()
 
     if not pm.user_exists(USER):
-        print()
         create_acc = prompt_y_n(
             'You do not have an account yet, would you like to create one?')
-        print()
         if not create_acc:
             return  # ok to do because nothing to save yet
-        print(f'Creating an account for: {USER}')
-        print()
+        print('Creating an account for: ' + Style.BRIGHT + USER + Style.RESET_ALL)
         while True:
             u_key = prompt_password(
                 'Please enter a key to use to access your account: ')
@@ -145,32 +144,27 @@ def main():
             if u_key_confirm == u_key:
                 break
             print_failure('The keys you entered do not match.')
-            print()
         u = User(USER, u_key)
         if not pm.add_user(u):
             return  # ok to do because nothing to save yet
-        print()
         print_success(f'Added {USER} as a user.')
         print()
         parser.print_help()
         pm.save_data()
         return
 
+    if not pm.anyone_signed_in():
+        print_warning('No one currently signed in. Sign in with the --sign-in option')
+    else:
+        curr_user = pm.get_curr_user_username()
+        print('Currently signed in: ' + Style.BRIGHT + curr_user + Style.RESET_ALL)
+
     # work for the argument/option provided starts here:
     args = parser.parse_args()
     if not any(vars(args).values()):
-        print('No options passed, nothing to do!')
+        print_warning('No options passed, nothing to do!')
         print()
         parser.print_help()
-        print()
-
-    if args.status:
-        if not pm.anyone_signed_in:
-            print('No one is signed in.')
-            print()
-        curr_user = pm.get_curr_user_username()
-        print(f'Current user signed in: {curr_user}')
-        print()
 
     if args.sign_in:
         input_key = prompt_password('Please enter your key: ')
@@ -178,70 +172,55 @@ def main():
         if not success:
             print_failure(
                 'Could not sign in. Make sure your key is correct and no one else is signed in.')
-            print()
         else:
             print_success('Signed in.')
-            print()
 
     if args.del_acc:
         if not pm.is_signed_in(USER):
             print_failure('You must sign in to delete your account.')
-            print()
             pm.save_data()
             return
         success = pm.remove_user(USER)
         if not success:
             print_failure(f'Could not delete your account.')
-            print()
         else:
             print_success(f'Deleted your account.')
-            print()
 
     if args.sign_out:
         if not pm.is_signed_in(USER):
             print_failure('You are not signed in.')
-            print()
             pm.save_data()
             return
         success = pm.sign_out(USER)
         if not success:
             print_failure('Could not sign out.')
-            print()
         else:
             print_success(f'Signed out.')
-            print()
 
     if args.reset_key:
         if not pm.is_signed_in(USER):
             print_failure('You must sign in to reset your key.')
-            print()
             pm.save_data()
             return
         new_key = prompt_password('Please enter your new key: ')
         success = pm.set_key(USER, new_key)
         if not success:
             print_failure('Could not set a new key.')
-            print()
         else:
             print_success('Reset key.')
-            print()
 
     if args.get_cred:
         if not pm.is_signed_in(USER):
             print_failure('You must sign in to get a credential.')
-            print()
             pm.save_data()
             return
         ws = prompt_str('Please enter the website of the credential: ')
         cred = pm.get_credential(USER, ws)
         if cred is None:
             print_failure(f'A credential for {ws} does not exist for {USER}.')
-            print()
         else:
             print_success(f'Successfully got the {ws} credential for {USER}.')
-            print()
             print(str(cred))
-            print()
 
     if args.add_cred:
         if not pm.is_signed_in(USER):
@@ -254,15 +233,12 @@ def main():
         success = pm.add_credential(USER, Credential(ws, uname, pswd))
         if not success:
             print_failure(f'Could not add the credential for {ws} for {USER}.')
-            print()
         else:
             print_success(f'Added the credential for {ws} for {USER}.')
-            print()
 
     if args.rm_cred:
         if not pm.is_signed_in(USER):
             print_failure('You must sign in to remove a credential.')
-            print()
             pm.save_data()
             return
         ws = prompt_str(
@@ -270,10 +246,8 @@ def main():
         success = pm.remove_credential(USER, ws)
         if not success:
             print_failure(f'A credential for {ws} does not exist for {USER}.')
-            print()
         else:
             print_success(f'Removed the credential for {ws} for {USER}.')
-            print()
 
     pm.save_data()
 
