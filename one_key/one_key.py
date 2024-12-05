@@ -98,6 +98,7 @@ def print_failure(msg: str):
     """
     print('[' + Fore.RED + 'FAILURE' + Style.RESET_ALL + '] ' + msg)
 
+
 def print_warning(msg: str):
     """Prints a warning message
 
@@ -113,20 +114,22 @@ def main():
     parser = argparse.ArgumentParser()
     options = parser.add_mutually_exclusive_group()
 
-    options.add_argument('--sign-in', action='store_true',
+    options.add_argument('-si', '--sign-in', action='store_true',
                          help='sign yourself in')
-    options.add_argument('--del-acc', action='store_true',
+    options.add_argument('-d', '--del-acc', action='store_true',
                          help='delete your user account and your credentials')
-    options.add_argument('--sign-out', action='store_true',
+    options.add_argument('-so', '--sign-out', action='store_true',
                          help='sign yourself out')
-    options.add_argument('--reset-key', action='store_true',
+    options.add_argument('-k', '--reset-key', action='store_true',
                          help='reset your key')
-    options.add_argument('--get-cred', action='store_true',
+    options.add_argument('-g', '--get-cred', action='store_true',
                          help='get a credential')
-    options.add_argument('--add-cred', action='store_true',
+    options.add_argument('-a', '--add-cred', action='store_true',
                          help='add a credential')
-    options.add_argument('--rm-cred', action='store_true',
+    options.add_argument('-rm', '--rm-cred', action='store_true',
                          help='remove a credential')
+    options.add_argument('-l', '--list', action='store_true',
+                         help='list the current user\'s credentials')
 
     pm = PasswordManager()
 
@@ -135,7 +138,8 @@ def main():
             'You do not have an account yet, would you like to create one?')
         if not create_acc:
             return  # ok to do because nothing to save yet
-        print('Creating an account for: ' + Style.BRIGHT + USER + Style.RESET_ALL)
+        print('Creating an account for: ' +
+              Style.BRIGHT + USER + Style.RESET_ALL)
         while True:
             u_key = prompt_password(
                 'Please enter a key to use to access your account: ')
@@ -154,10 +158,12 @@ def main():
         return
 
     if not pm.anyone_signed_in():
-        print_warning('No one currently signed in. Sign in with the --sign-in option')
+        print_warning(
+            'No one currently signed in. Sign in with the --sign-in option')
     else:
         curr_user = pm.get_curr_user_username()
-        print('Currently signed in: ' + Style.BRIGHT + curr_user + Style.RESET_ALL)
+        print('Currently signed in: ' + Style.BRIGHT +
+              curr_user + Style.RESET_ALL)
 
     # work for the argument/option provided starts here:
     args = parser.parse_args()
@@ -248,6 +254,12 @@ def main():
             print_failure(f'A credential for {ws} does not exist for {USER}.')
         else:
             print_success(f'Removed the credential for {ws} for {USER}.')
+
+    if args.list:
+        if not pm.is_signed_in(USER):
+            print_failure('You must sign in to list credentials.')
+            pm.save_data()
+            return
 
     pm.save_data()
 
