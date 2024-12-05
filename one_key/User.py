@@ -227,7 +227,8 @@ class User:
         border_line = '=' * total_width + '\n'
 
         cred_list = ''
-        cred_list += "  ".join(f"{header.ljust(width)}" for header, width in zip(headers, column_widths)) + '\n'
+        cred_list += "  ".join(f"{header.ljust(width)}" for header,
+                               width in zip(headers, column_widths)) + '\n'
         cred_list += border_line
         for row in rows[1:]:
             cred_list += "  ".join(f"{str(item).ljust(width)}" for item,
