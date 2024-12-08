@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='one_key',
+    name='onekey_manager',
     version='1.0.0',
     author='Hubert Dang',
     author_email='hubertdang@gmail.com',

@@ -20,7 +20,7 @@ clean:
 	rm -rf one_key/data/*
 
 upload: build
-	twice upload dist/*
+	twine upload dist/* --verbose
 
 upload_test:
 	twine upload --repository testpypi dist/* --verbose
