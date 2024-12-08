@@ -136,7 +136,8 @@ def main():
     pm = PasswordManager()
 
     if not pm.user_exists(USER):
-        print_warning('You do not have an account yet. Create one with the -acc option')
+        print_warning(
+            'You do not have an account yet. Create one with the -acc option')
     else:
         if not pm.anyone_signed_in():
             print_warning(
@@ -144,7 +145,7 @@ def main():
         else:
             curr_user = pm.get_curr_user_username()
             print('Currently signed in: ' + Style.BRIGHT +
-                curr_user + Style.RESET_ALL)
+                  curr_user + Style.RESET_ALL)
 
     # work for the argument/option provided starts here:
     args = parser.parse_args()
@@ -155,7 +156,8 @@ def main():
 
     if args.add_acc:
         if pm.user_exists(USER):
-            print_failure(f'An account with username \"{USER}\" already exists.')
+            print_failure(
+                f'An account with username \"{USER}\" already exists.')
         else:
             while True:
                 u_key = prompt_password(
@@ -186,7 +188,8 @@ def main():
         if not pm.is_signed_in(USER):
             print_failure('You must sign in to delete your account.')
         else:
-            confirmed = prompt_y_n('Are you sure you want to delete your account?')
+            confirmed = prompt_y_n(
+                'Are you sure you want to delete your account?')
             if confirmed:
                 success = pm.remove_user(USER)
                 if not success:
@@ -222,9 +225,11 @@ def main():
             ws = prompt_str('Please enter the website of the credential: ')
             cred = pm.get_credential(USER, ws)
             if cred is None:
-                print_failure(f'A credential for {ws} does not exist for {USER}.')
+                print_failure(
+                    f'A credential for {ws} does not exist for {USER}.')
             else:
-                print_success(f'Successfully got the {ws} credential for {USER}.')
+                print_success(
+                    f'Successfully got the {ws} credential for {USER}.')
                 print(str(cred))
 
     if args.add_cred:
@@ -236,7 +241,8 @@ def main():
             pswd = prompt_password('Please enter the password: ')
             success = pm.add_credential(USER, Credential(ws, uname, pswd))
             if not success:
-                print_failure(f'Could not add the credential for {ws} for {USER}.')
+                print_failure(
+                    f'Could not add the credential for {ws} for {USER}.')
             else:
                 print_success(f'Added the credential for {ws} for {USER}.')
 
@@ -248,7 +254,8 @@ def main():
                 'Please enter the website of the credential to remove: ')
             success = pm.remove_credential(USER, ws)
             if not success:
-                print_failure(f'A credential for {ws} does not exist for {USER}.')
+                print_failure(
+                    f'A credential for {ws} does not exist for {USER}.')
             else:
                 print_success(f'Removed the credential for {ws} for {USER}.')
 

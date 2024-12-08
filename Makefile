@@ -1,4 +1,4 @@
-.PHONY: init test format build upload_test upload install_test install_local clean
+.PHONY: init test format build clean upload_test upload install_test install_local upgrade_test
 
 init:
 	sudo apt install -y python3.10-venv
@@ -12,11 +12,15 @@ test:
 format:
 	autopep8 --in-place --recursive .
 
-build:
+build: clean
 	python -m build
 
-upload_test: build
-	twine upload --repository testpypi dist/*
+clean:
+	rm -rf dist build *.egg-info
+	rm -rf one_key/data/*
+
+upload_test:
+	twine upload --repository testpypi dist/* --verbose
 
 upload: build
 	twice upload dist/*
@@ -25,9 +29,8 @@ install_test:
 	pip install --index-url https://test.pypi.org/simple/ one_key
 
 install_local: build
-	pip install dist/one_key-x.y.z-py3-none-any.whl
+	pip install dist/one_key-*.whl --force-reinstall
 
-clean:
-	rm -rf dist build *.egg-info
-	rm data/*
+upgrade_test:
+	pip install --index-url https://test.pypi.org/simple/ --upgrade one_key
 

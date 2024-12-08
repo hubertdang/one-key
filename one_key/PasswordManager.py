@@ -3,6 +3,7 @@ from one_key.Credential import Credential
 
 import pickle
 import os
+from importlib.resources import files
 
 
 class PasswordManager:
@@ -14,16 +15,16 @@ class PasswordManager:
         __curr_user: The currently signed in user.
 
     """
-    DATA_DIR = 'data'
+    DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
     PM_SAVE_FILE = 'password_manager.pkl'
     PM_SAVE_FILE_PATH = os.path.join(DATA_DIR, PM_SAVE_FILE)
 
-    def __init__(self, data_file=PM_SAVE_FILE_PATH):
+    def __init__(self):
         """
         Initializes a new PasswordManager instance.
 
         """
-        self.__data_file = data_file
+        self.__data_file = self.PM_SAVE_FILE_PATH
         self.__users = {}
         self.__curr_user = None
         self.load_data()
