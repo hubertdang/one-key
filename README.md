@@ -12,8 +12,8 @@ pip install onekey_manager
 
 ## Usage
 
-```bash
-hubert@Ubuntu:~$ one_key 
+```
+hubert@Ubuntu:~$ one_key --help
 [WARNING] You do not have an account yet. Create one with the -acc option
 
 usage: one_key [-h] [-acc | -si | -d | -so | -k | -g | -a | -rm | -l]
