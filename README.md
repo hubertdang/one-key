@@ -1,6 +1,6 @@
 # OneKey
 
-OneKey is a command-line password manager for storing and accessing your online credentials.
+OneKey is a command-line password manager for storing and accessing your online credentials. Currently only supports Linux (maybe macOS too?).
 
 ## Installation
 
