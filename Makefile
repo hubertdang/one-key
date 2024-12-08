@@ -19,11 +19,11 @@ clean:
 	rm -rf dist build *.egg-info
 	rm -rf one_key/data/*
 
-upload_test:
-	twine upload --repository testpypi dist/* --verbose
-
 upload: build
 	twice upload dist/*
+
+upload_test:
+	twine upload --repository testpypi dist/* --verbose
 
 install_test:
 	pip install --index-url https://test.pypi.org/simple/ one_key
